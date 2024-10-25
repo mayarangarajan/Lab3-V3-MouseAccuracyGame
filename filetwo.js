@@ -51,12 +51,13 @@ function spawnTarget() {
 
     document.body.appendChild(target);
 
-    //grow target
-    target.style.transform = "scale(1.5)";  
-    
-       //shrink target
-        target.style.transform = "scale(0.5)";  
-   
+     //grow target
+     target.style.transform = "scale(1.5)";  
+     setTimeout(() => {
+     
+        //shrink target
+         target.style.transform = "scale(0.5)";  
+     }, 500); 
 
     target.addEventListener('click', () => {
         targetsClicked++;
