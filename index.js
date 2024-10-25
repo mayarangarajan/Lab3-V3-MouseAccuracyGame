@@ -86,7 +86,7 @@ function spawnTarget() {
 
 // Resetting Game
 function resetGame() {
-	console.log('Resetting game.')
+	console.log('Resetting game.');
 	totalTargets = 0;
 	targetsClicked = 0;
 	missedTargets = 0;
