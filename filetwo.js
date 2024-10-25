@@ -1,5 +1,5 @@
 //Variables
-var gameTime = 30;  //Duration
+var gameTime;  //Duration
 var totalTargets = 0; //# of targets
 var targetsClicked = 0; // # of targets clicked
 var missedTargets = 0; // # of targets missed
@@ -21,6 +21,17 @@ var scoreboard = document.getElementById("scoreboard");
 
 //Start game function
 function startGame() {
+    
+    var gameTimeInput = document.getElementById("gameTimeInput").value; // Get input value of game time
+    gameTime = parseInt(gameTimeInput); // Convert input to a number
+
+    // in case they say game time is less than 0,
+    if (isNaN(gameTime) || gameTime <= 0) {
+        alert("Please enter a valid game time.");
+        return;
+    }
+    
+    
     resetGame();
     targetInterval = setInterval(spawnTarget, 1000);
     gameTimer = setInterval(updateTimer, 1000);
