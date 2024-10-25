@@ -1,14 +1,15 @@
-var gameTime = 30;  
-var totalTargets = 0;
-var targetsClicked = 0;
-var missedTargets = 0; 
-var targetInterval = null; 
-var gameTimer = null;  
-var remainingTime = gameTime; 
+//Variables
+var gameTime = 30;  //Duration
+var totalTargets = 0; //# of targets
+var targetsClicked = 0; // # of targets clicked
+var missedTargets = 0; // # of targets missed
+var targetInterval = null; // Creates targets
+var gameTimer = null;  // Game timer
+var remainingTime = gameTime; //Remaining time
 
-// Start button
+// Start button, event listener
 var startButton = document.getElementById("startGame");
-startButton.addEventListener('click', startGame); 
+startButton.addEventListener('click', startGame);
 
 // Scoreboard elements
 var totalTargetsDisplay = document.getElementById("totalTargets");
@@ -21,9 +22,9 @@ var scoreboard = document.getElementById("scoreboard");
 //Start game function
 function startGame() {
     resetGame();
-    targetInterval = setInterval(spawnTarget, 1000);  
-    gameTimer = setInterval(updateTimer, 1000);  
-    setTimeout(endGame, gameTime * 1000);  
+    targetInterval = setInterval(spawnTarget, 1000);
+    gameTimer = setInterval(updateTimer, 1000);
+    setTimeout(endGame, gameTime * 1000);
 }
 
 //Creating targets
@@ -32,75 +33,71 @@ function spawnTarget() {
     var target = document.createElement("div");
     target.classList.add("target");
 
-    
-    //Randomizing target locations
-    var maxX = gameArea.offsetWidth - 200;  
-    var maxY = gameArea.offsetHeight - 200;  
-    var randomX = randomValue(200, maxX);
-    var randomY = randomValue(200, maxY);
 
-   
-   //Target styling
+    //Randomizing target locations
+    var maxX = gameArea.offsetWidth - 75; // x in between the area with margin of 75
+    var maxY = gameArea.offsetHeight - 75; // y in between the area with margin of 75
+    var randomX = randomValue(75, maxX); // randomizes between 75 and x (game area - 75)
+    var randomY = randomValue(75, maxY); //randomizes between 75 and y (game area - 75)
+
+
+    //Target styling
     target.style.left = `${randomX}px`;
     target.style.top = `${randomY}px`;
-    target.style.width = "50px";  
-    target.style.height = "50px";  
-    target.style.backgroundColor = "red";  
+    target.style.width = "50px"; // target width 
+    target.style.height = "50px"; // target height 
+    target.style.backgroundColor = "red"; // target color
     target.style.position = "absolute"; // Ensure targets are positioned absolutely
-    target.style.transition = "transform 0.5s";  
-
+    target.style.transform = "scale(1)" // scale original
+    target.style.transition = "transform 0.5s"; //transition
+    target.style.transition = "transform 2s" // transform
     document.body.appendChild(target);
 
-     //grow target
-     target.style.transform = "scale(1.5)";  
-     setTimeout(() => {
-     
-        //shrink target
-         target.style.transform = "scale(0.5)";  
-     }, 500); 
+    //Grow target
+    setTimeout(() => {
+        target.style.transform = "scale(3)";  // 3 times its size
+    }, 100);  // Grows 1 seconds
 
+    // Shrink target after growing
+    setTimeout(() => {
+        target.style.transform = "scale(0.5)";  //  0.5 times its size
+    }, 200);  // Shrinks 2 seconds
+
+
+    // Removing a target once clicked and adding it to makes
     target.addEventListener('click', () => {
         targetsClicked++;
-        document.body.removeChild(target);  
+        document.body.removeChild(target);
     });
 
+    // Removing a target once not clicked and adding it to misses
     setTimeout(() => {
         if (document.body.contains(target)) {
             missedTargets++;
-            document.body.removeChild(target);  
+            document.body.removeChild(target);
         }
-    }, 1500);  
+    }, 1100); // Vanishes after 11 seconds
 }
 
 //Resetting Game
 function resetGame() {
     totalTargets = 0;
     targetsClicked = 0;
-    missedTargets = 0; 
-    clearTargets(); 
+    missedTargets = 0;
+    clearTargets();
 
     //Resetting Time
-    remainingTime = gameTime;  
-    document.getElementById("timerDisplay").textContent = `Time left: ${remainingTime}s`; 
+    remainingTime = gameTime;
+    document.getElementById("timerDisplay").textContent = `Time left: ${remainingTime}s`;
 }
 
-//Updating Timer Throughout Game
-function updateTimer() {
-    remainingTime--; 
-    document.getElementById("timerDisplay").textContent = `Time left: ${remainingTime}s`; 
-
-   //Ending Timer
-    if (remainingTime <= 0) {
-        clearInterval(gameTimer); 
-    }
-}
 
 //Ending Games
 function endGame() {
     clearTargets();
-    displayScore(); 
+    displayScore();
     clearInterval(gameTimer);
-    clearInterval(targetInterval); 
+    clearInterval(targetInterval);
 }
 
 //Clearing targets
@@ -109,22 +106,33 @@ function clearTargets() {
     targets.forEach(target => target.remove());
 }
 
+//Updating Timer Throughout Game
+function updateTimer() {
+    remainingTime--;
+    document.getElementById("timerDisplay").textContent = `Time left: ${remainingTime}s`;
+
+    //Ending Timer
+    if (remainingTime <= 0) {
+        clearInterval(gameTimer);
+    }
+}
+
 //Score display
 function displayScore() {
-    
-   totalTargetsDisplay.textContent= `Total targets: ${totalTargets}`;
-   targetsClickedDisplay.textContent= `Targets clicked: ${targetsClicked}`;
-   missedTargetsDisplay.textContent= `Missed targets: ${missedTargets}`;
-   finalScoreDisplay.textContent= `Final score: ${calculateScore()}`;
-   scoreboard.classList.remove("hidden"); 
+
+    totalTargetsDisplay.textContent = `Total targets: ${totalTargets}`;
+    targetsClickedDisplay.textContent = `Targets clicked: ${targetsClicked}`;
+    missedTargetsDisplay.textContent = `Missed targets: ${missedTargets}`;
+    finalScoreDisplay.textContent = `Final score (out of 100): ${calculateScore()}`;
+    scoreboard.classList.remove("hidden");
 }
 
 //Score Calculation
 function calculateScore() {
-   return Math.floor((100* targetsClicked / totalTargets)); 
+    return Math.floor((100 * targetsClicked / totalTargets));
 }
 
-//Claire's Class Notes???
+// Random Value Initialization
 function randomValue(min, max) {
-   return Math.random() * (max - min) + min; 
+    return Math.random() * (max - min) + min;
 }
