@@ -36,8 +36,8 @@ function spawnTarget() {
     //Randomizing target locations
     var maxX = gameArea.offsetWidth - 200;  
     var maxY = gameArea.offsetHeight - 200;  
-    var randomX = randomValue(0, maxX);
-    var randomY = randomValue(0, maxY);
+    var randomX = randomValue(200, maxX);
+    var randomY = randomValue(200, maxY);
 
    
    //Target styling
@@ -51,8 +51,10 @@ function spawnTarget() {
 
     document.body.appendChild(target);
 
+    //grow target
     target.style.transform = "scale(1.5)";  
     setTimeout(() => {
+       //shrink target
         target.style.transform = "scale(0.5)";  
     }, 500); 
 
@@ -118,7 +120,7 @@ function displayScore() {
 
 //Score Calculation
 function calculateScore() {
-   return Math.floor((targetsClicked / totalTargets)) *100 || 0; 
+   return Math.floor((100* targetsClicked / totalTargets)); 
 }
 
 //Claire's Class Notes???
